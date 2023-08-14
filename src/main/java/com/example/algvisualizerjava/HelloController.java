@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -32,9 +33,19 @@ public class HelloController {
 
 
     private Random random = new Random();
+    private Scene scene;
+    private String sortType = "";
 
 
 
+    public void setScene(Scene sc){
+        scene = sc;
+        sc.setOnKeyPressed(keyEvent -> {
+            sortType = keyEvent.getText();
+            System.out.println(sortType);
+        });
+
+    }
 
     public void resetRectangleContainer(){
 //        if (sortingThread!=null){
@@ -103,7 +114,15 @@ public class HelloController {
 
     public void startSorting() {
         sortingThread = new Thread(() -> {
-            insertionSort(integerArray);
+            switch (sortType){
+                case "i":
+                    insertionSort(integerArray);
+                    break;
+
+                default:
+                    algorithmExplanation.setText("No algorithm type selected");
+                    break;
+            }
 
         });
 
