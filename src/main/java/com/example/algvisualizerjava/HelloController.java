@@ -12,7 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -35,14 +35,31 @@ public class HelloController {
     private Random random = new Random();
     private Scene scene;
     private String sortType = "";
+    Map<String, List<String>> dictionary = new HashMap<>();
+
 
 
 
     public void setScene(Scene sc){
+        algorithmExplanation.setText("No algorithm selected");
+        algorithmName.setText("");
+
+        dictionary.put("i", new ArrayList<String>(Arrays.asList("Insertion Sort", "Some decent explanation")));
+        dictionary.put("b", new ArrayList<String>(Arrays.asList("Bubble Sort", "Some decent explanation")));
+
         scene = sc;
         sc.setOnKeyPressed(keyEvent -> {
             sortType = keyEvent.getText();
             System.out.println(sortType);
+            List<String> info = dictionary.get(sortType);
+            if (info == null){
+                algorithmName.setText("Select a proper algorithm");
+
+            }else{
+                algorithmName.setText(info.get(0));
+                algorithmExplanation.setText(info.get(1));
+            }
+
         });
 
     }
@@ -94,6 +111,28 @@ public class HelloController {
 
     }
 
+
+    public void bubbleSort(int[] array) {
+        int n = array.length;
+
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (array[j] > array[j + 1]) {
+                    // Swap array[j] and array[j+1]
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+
+                    redrawRectangles(array, i, j);
+
+
+
+                }
+            }
+        }
+    }
+
     public void insertionSort(int[] array) {
         int n = array.length;
         for (int i = 1; i < n; i++) {
@@ -118,6 +157,8 @@ public class HelloController {
                 case "i":
                     insertionSort(integerArray);
                     break;
+                case "b":
+                    bubbleSort(integerArray);
 
                 default:
                     algorithmExplanation.setText("No algorithm type selected");
