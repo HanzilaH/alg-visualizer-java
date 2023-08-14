@@ -41,11 +41,13 @@ public class HelloController {
 
 
     public void setScene(Scene sc){
-        algorithmExplanation.setText("No algorithm selected");
-        algorithmName.setText("");
+
+        algorithmExplanation.setText("");
+        algorithmName.setText("No algorithm selected");
 
         dictionary.put("i", new ArrayList<String>(Arrays.asList("Insertion Sort", "Some decent explanation")));
         dictionary.put("b", new ArrayList<String>(Arrays.asList("Bubble Sort", "Some decent explanation")));
+        dictionary.put("s", new ArrayList<String>(Arrays.asList("Selection Sort", "Some decent explanation")));
 
         scene = sc;
         sc.setOnKeyPressed(keyEvent -> {
@@ -133,6 +135,28 @@ public class HelloController {
         }
     }
 
+    public void selectionSort(int[] array) {
+        int n = array.length;
+
+        for (int i = 0; i < n - 1; i++) {
+            int minIndex = i;
+
+            // Find the minimum element in the unsorted part of the array
+            for (int j = i + 1; j < n; j++) {
+                if (array[j] < array[minIndex]) {
+                    minIndex = j;
+                }
+                redrawRectangles(array, i, j);
+
+            }
+
+            // Swap the found minimum element with the first element
+            int temp = array[minIndex];
+            array[minIndex] = array[i];
+            array[i] = temp;
+        }
+    }
+
     public void insertionSort(int[] array) {
         int n = array.length;
         for (int i = 1; i < n; i++) {
@@ -159,6 +183,9 @@ public class HelloController {
                     break;
                 case "b":
                     bubbleSort(integerArray);
+                    break;
+                case "s":
+                    selectionSort(integerArray);
 
                 default:
                     algorithmExplanation.setText("No algorithm type selected");
